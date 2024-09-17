@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- test line -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiper with Free Mode and Gestures</title>
+  <title>Swiper with Button Selection</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
   <style>
 	/* Global styles */
@@ -72,6 +71,10 @@
 	  font-size: 16px;
 	}
 
+	.button.selected {
+	  background-color: #28a745; /* Change color to indicate selection */
+	}
+
 	.button:hover {
 	  background-color: #0056b3;
 	}
@@ -114,38 +117,38 @@
 	<!-- Swiper Carousel -->
 	<div class="swiper">
 	  <div class="swiper-wrapper">
-		<div class="swiper-slide">
+		<div class="swiper-slide" data-selected="">
 		  <!-- Image at the top of the card -->
 		  <img src="https://via.placeholder.com/150" alt="Slide 1 Image" class="slide-image" />
 		  Slide 1
 		  <!-- Buttons below the image -->
 		  <div class="button-container">
-			<button class="button">Left Button</button>
-			<button class="button">Right Button</button>
+			<button class="button" data-slide="0" data-button="left">Left Button</button>
+			<button class="button" data-slide="0" data-button="right">Right Button</button>
 		  </div>
 		</div>
-		<div class="swiper-slide">
+		<div class="swiper-slide" data-selected="">
 		  <img src="https://via.placeholder.com/150" alt="Slide 2 Image" class="slide-image" />
 		  Slide 2
 		  <div class="button-container">
-			<button class="button">Left Button</button>
-			<button class="button">Right Button</button>
+			<button class="button" data-slide="1" data-button="left">Left Button</button>
+			<button class="button" data-slide="1" data-button="right">Right Button</button>
 		  </div>
 		</div>
-		<div class="swiper-slide">
+		<div class="swiper-slide" data-selected="">
 		  <img src="https://via.placeholder.com/150" alt="Slide 3 Image" class="slide-image" />
 		  Slide 3
 		  <div class="button-container">
-			<button class="button">Left Button</button>
-			<button class="button">Right Button</button>
+			<button class="button" data-slide="2" data-button="left">Left Button</button>
+			<button class="button" data-slide="2" data-button="right">Right Button</button>
 		  </div>
 		</div>
-		<div class="swiper-slide">
+		<div class="swiper-slide" data-selected="">
 		  <img src="https://via.placeholder.com/150" alt="Slide 4 Image" class="slide-image" />
 		  Slide 4
 		  <div class="button-container">
-			<button class="button">Left Button</button>
-			<button class="button">Right Button</button>
+			<button class="button" data-slide="3" data-button="left">Left Button</button>
+			<button class="button" data-slide="3" data-button="right">Right Button</button>
 		  </div>
 		</div>
 	  </div>
@@ -165,6 +168,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script>
+	// Initialize Swiper
 	const swiper = new Swiper('.swiper', {
 	  slidesPerView: 1, // Show 1 slide at a time (mobile-friendly)
 	  spaceBetween: 10, // Space between slides
@@ -184,10 +188,44 @@
 		enabled: true, // Enable keyboard navigation
 		onlyInViewport: true, // Only works when the swiper is visible in the viewport
 	  },
-	  mousewheel: false, // Disable mousewheel control for desktop users
-	  freeMode: false, // Disable free mode for momentum scrolling (works for both touch and trackpad gestures)
 	  loop: true, // Infinite loop for the slides
+	  on: {
+		// Trigger when the slide transition ends
+		slideChangeTransitionEnd: function () {
+		  updateButtonStyles();
+		},
+	  },
 	});
+
+	// Function to handle button click using event delegation
+	document.querySelector('.swiper').addEventListener('click', function(event) {
+	  if (event.target.classList.contains('button')) {
+		const currentSlide = swiper.slides[swiper.realIndex];
+		const selectedButton = event.target.dataset.button;
+
+		// Store the selection in the slide's data-selected attribute
+		currentSlide.dataset.selected = selectedButton;
+
+		// Update button styles for the current slide
+		updateButtonStyles();
+	  }
+	});
+
+	// Function to update button styles based on the selection
+	function updateButtonStyles() {
+	  const currentSlide = swiper.slides[swiper.realIndex];
+	  const buttons = currentSlide.querySelectorAll('.button');
+
+	  // Reset all button styles
+	  buttons.forEach(button => button.classList.remove('selected'));
+
+	  // Add 'selected' class to the chosen button
+	  const selectedButton = currentSlide.dataset.selected;
+	  if (selectedButton) {
+		const selected = currentSlide.querySelector(`button[data-button="${selectedButton}"]`);
+		if (selected) selected.classList.add('selected');
+	  }
+	}
   </script>
 </body>
 </html>
