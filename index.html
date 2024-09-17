@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
   <style>
 	/* Global styles */
+/* Global styles */
 	body {
 	  margin: 0;
 	  padding: 40px 0; /* Added 40px padding at the top */
@@ -17,35 +18,36 @@
 	  justify-content: center;
 	  align-items: center;
 	}
-
+	
 	/* Center the main content */
 	.main-container {
 	  max-width: 900px;
 	  margin: 0 auto;
 	  padding: 20px;
 	  background-color: #fff; /* Background color remains white */
-	  /* box-shadow removed */ 
+	  /* box-shadow removed */
 	}
-
+	
 	/* Ensure the container is responsive */
 	.main-container img {
 	  max-width: 100%;
 	  height: auto;
 	}
-
-	/* Container for Swiper to apply vertical centering and padding */
+	
+	/* Container for Swiper to apply padding */
 	.swiper-wrapper-container {
 	  width: 100%;
 	  display: flex;
 	  justify-content: center;
+	  height: auto; /* Removed height to allow natural sizing */
 	}
-
+	
 	/* Swiper styling */
 	.swiper {
 	  width: 80%;
 	  display: none;
 	}
-
+	
 	.swiper-slide {
 	  background-color: #ddd;
 	  display: flex;
@@ -57,7 +59,7 @@
 	  padding: 20px;
 	  box-sizing: border-box;
 	}
-
+	
 	/* Maintain the 3:2 aspect ratio */
 	.image-container {
 	  width: 100%;
@@ -66,7 +68,7 @@
 	  padding-bottom: 66.67%; /* 3:2 aspect ratio */
 	  background-color: #ddd; /* Fallback color */
 	}
-
+	
 	.image-container img {
 	  position: absolute;
 	  top: 0;
@@ -75,14 +77,14 @@
 	  height: 100%;
 	  object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
 	}
-
+	
 	/* Button container */
 	.button-container {
 	  display: flex;
 	  gap: 10px;
 	  margin-top: 20px;
 	}
-
+	
 	/* Style for the buttons */
 	.button {
 	  padding: 10px 20px;
@@ -92,27 +94,27 @@
 	  cursor: pointer;
 	  font-size: 16px;
 	}
-
+	
 	.button.selected {
 	  background-color: #0056b3;
 	}
-
+	
 	.button:hover {
 	  background-color: #00438d;
 	}
-
+	
 	/* Style for swiper pagination */
 	.swiper-pagination {
 	  position: relative;
 	  margin-top: 40px;
 	}
-
+	
 	/* Hide navigation buttons */
 	.swiper-button-next, 
 	.swiper-button-prev {
 	  display: none;
 	}
-
+	
 	/* Loader styling */
 	#loading-indicator {
 	  text-align: center;
@@ -120,8 +122,8 @@
 	  color: #333;
 	  margin: 20px;
 	}
-
-	/* Center swiper container vertically on mobile screens */
+	
+	/* Center swiper container vertically only on mobile screens */
 	@media (max-width: 900px) {
 	  .swiper-wrapper-container {
 		height: 100vh; /* Full screen height */
@@ -130,16 +132,17 @@
 		justify-content: center; /* Vertically center */
 		align-items: center; /* Horizontally center */
 	  }
-
+	
 	  .swiper-slide {
 		font-size: 18px;
 	  }
-
+	
 	  .button {
 		font-size: 14px;
 		padding: 8px 16px;
 	  }
 	}
+
 
   </style>
 </head>
