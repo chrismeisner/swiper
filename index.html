@@ -32,7 +32,6 @@
 	/* Swiper styling */
 	.swiper {
 	  width: 80%;
-	  height: 450px;
 	  margin: 0 auto 20px auto;
 	}
 
@@ -44,13 +43,17 @@
 	  align-items: center;
 	  font-size: 24px;
 	  font-weight: bold;
+	  padding: 20px;
+	  box-sizing: border-box;
 	}
 
 	/* Style for the image on each slide */
 	.slide-image {
-	  width: 150px;
-	  height: 150px;
-	  object-fit: cover;
+	  max-width: 100%;
+	  max-height: 400px;
+	  width: auto;
+	  height: auto;
+	  object-fit: contain;
 	  margin-bottom: 20px;
 	}
 
@@ -72,11 +75,23 @@
 	}
 
 	.button.selected {
-	  background-color: #28a745;
+	  background-color: #0056b3;
 	}
 
 	.button:hover {
 	  background-color: #0056b3;
+	}
+
+	/* Style for swiper pagination */
+	.swiper-pagination {
+	  position: relative;
+	  margin-top: 40px; /* Move pagination down by 40px */
+	}
+
+	/* Hide navigation buttons */
+	.swiper-button-next, 
+	.swiper-button-prev {
+	  display: none;
 	}
 
 	/* Media queries for better mobile responsiveness */
@@ -87,17 +102,13 @@
 	}
 
 	@media (max-width: 600px) {
-	  .swiper {
-		height: 350px;
-	  }
-
 	  .swiper-slide {
 		font-size: 18px;
 	  }
 
 	  .slide-image {
-		width: 120px;
-		height: 120px;
+		max-width: 100%;
+		max-height: 300px;
 	  }
 
 	  .button {
@@ -116,7 +127,7 @@
 	<div class="swiper">
 	  <div class="swiper-wrapper">
 		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/150" alt="Slide 1 Image" class="slide-image" />
+		  <img src="https://via.placeholder.com/600x400" alt="Slide 1 Image" class="slide-image" />
 		  Slide 1
 		  <div class="button-container">
 			<button class="button" data-slide="0" data-button="left">Left Button</button>
@@ -124,7 +135,7 @@
 		  </div>
 		</div>
 		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/150" alt="Slide 2 Image" class="slide-image" />
+		  <img src="https://via.placeholder.com/600x400" alt="Slide 2 Image" class="slide-image" />
 		  Slide 2
 		  <div class="button-container">
 			<button class="button" data-slide="1" data-button="left">Left Button</button>
@@ -132,7 +143,7 @@
 		  </div>
 		</div>
 		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/150" alt="Slide 3 Image" class="slide-image" />
+		  <img src="https://via.placeholder.com/600x400" alt="Slide 3 Image" class="slide-image" />
 		  Slide 3
 		  <div class="button-container">
 			<button class="button" data-slide="2" data-button="left">Left Button</button>
@@ -140,7 +151,7 @@
 		  </div>
 		</div>
 		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/150" alt="Slide 4 Image" class="slide-image" />
+		  <img src="https://via.placeholder.com/600x400" alt="Slide 4 Image" class="slide-image" />
 		  Slide 4
 		  <div class="button-container">
 			<button class="button" data-slide="3" data-button="left">Left Button</button>
@@ -150,12 +161,9 @@
 	  </div>
 
 	  <div class="swiper-pagination"></div>
-	  <div class="swiper-button-next"></div>
-	  <div class="swiper-button-prev"></div>
 	</div>
 
 	<p>Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
-	<img src="https://via.placeholder.com/800x400" alt="Sample Image" />
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
@@ -170,11 +178,7 @@
 	  },
 	  pagination: {
 		el: '.swiper-pagination',
-		clickable: true,
-	  },
-	  navigation: {
-		nextEl: '.swiper-button-next',
-		prevEl: '.swiper-button-prev',
+		clickable: true, // Enable pagination to be clickable
 	  },
 	  keyboard: {
 		enabled: true,
