@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiper with Free Mode and Gestures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <style>
+	/* Global styles */
+	body {
+	  margin: 0;
+	  padding: 0;
+	  font-family: Arial, sans-serif;
+	  background-color: #f4f4f4;
+	}
+
+	/* Center the main content */
+	.main-container {
+	  max-width: 900px; /* Limit width to 900px */
+	  margin: 0 auto; /* Center the content */
+	  padding: 20px;
+	  background-color: #fff;
+	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	/* Ensure the container is responsive */
+	.main-container img {
+	  max-width: 100%; /* Make images responsive */
+	  height: auto;
+	}
+
+	/* Swiper styling */
+	.swiper {
+	  width: 80%; /* Make the swiper occupy only 80% of the total width */
+	  height: 400px; /* Make the swiper cards taller */
+	  margin: 0 auto 20px auto; /* Center the swiper with auto margins and space below */
+	}
+
+	.swiper-slide {
+	  background-color: #ddd;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  font-size: 24px;
+	  font-weight: bold;
+	}
+
+	/* Media queries for better mobile responsiveness */
+	@media (max-width: 900px) {
+	  .main-container {
+		padding: 10px; /* Reduce padding for smaller screens */
+	  }
+	}
+
+	@media (max-width: 600px) {
+	  .swiper {
+		height: 300px; /* Adjust the height of the Swiper on smaller screens */
+	  }
+
+	  .swiper-slide {
+		font-size: 18px; /* Smaller font size for mobile */
+	  }
+	}
+  </style>
+</head>
+<body>
+
+  <!-- Main content container with max-width of 900px -->
+  <div class="main-container">
+	<h1>Welcome to Our Responsive Site</h1>
+	<p>This section of the website has a maximum width of 900px and scales down nicely for mobile devices.</p>
+	
+	<!-- Swiper Carousel -->
+	<div class="swiper">
+	  <div class="swiper-wrapper">
+		<div class="swiper-slide">Slide 1</div>
+		<div class="swiper-slide">Slide 2</div>
+		<div class="swiper-slide">Slide 3</div>
+		<div class="swiper-slide">Slide 4</div>
+	  </div>
+  
+	  <!-- Pagination -->
+	  <div class="swiper-pagination"></div>
+  
+	  <!-- Navigation -->
+	  <div class="swiper-button-next"></div>
+	  <div class="swiper-button-prev"></div>
+	</div>
+
+	<!-- Additional content -->
+	<p>Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
+	<img src="https://via.placeholder.com/800x400" alt="Sample Image" />
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+	const swiper = new Swiper('.swiper', {
+	  slidesPerView: 1, // Show 1 slide at a time (mobile-friendly)
+	  spaceBetween: 10, // Space between slides
+	  effect: 'cards', // Use Cards effect for stacked slides
+	  cardsEffect: {
+		slideShadows: true,
+	  },
+	  pagination: {
+		el: '.swiper-pagination',
+		clickable: true,
+	  },
+	  navigation: {
+		nextEl: '.swiper-button-next',
+		prevEl: '.swiper-button-prev',
+	  },
+	  keyboard: {
+		enabled: true, // Enable keyboard navigation
+		onlyInViewport: true, // Only works when the swiper is visible in the viewport
+	  },
+	  mousewheel: true, // Enable mousewheel control for desktop users
+	  freeMode: false, // Enable free mode for momentum scrolling (works for both touch and trackpad gestures)
+	  loop: true, // Infinite loop for the slides
+	});
+  </script>
+</body>
+</html>
