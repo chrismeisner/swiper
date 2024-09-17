@@ -33,6 +33,7 @@
 	.swiper {
 	  width: 80%;
 	  margin: 0 auto 20px auto;
+	  display: none; /* Initially hide the Swiper container */
 	}
 
 	.swiper-slide {
@@ -45,16 +46,6 @@
 	  font-weight: bold;
 	  padding: 20px;
 	  box-sizing: border-box;
-	}
-
-	/* Style for the image on each slide */
-	.slide-image {
-	  max-width: 100%;
-	  max-height: 400px;
-	  width: auto;
-	  height: auto;
-	  object-fit: contain;
-	  margin-bottom: 20px;
 	}
 
 	/* Button container */
@@ -94,6 +85,14 @@
 	  display: none;
 	}
 
+	/* Loader styling */
+	#loading-indicator {
+	  text-align: center;
+	  font-size: 18px;
+	  color: #333;
+	  margin: 20px;
+	}
+
 	/* Media queries for better mobile responsiveness */
 	@media (max-width: 900px) {
 	  .main-container {
@@ -104,11 +103,6 @@
 	@media (max-width: 600px) {
 	  .swiper-slide {
 		font-size: 18px;
-	  }
-
-	  .slide-image {
-		max-width: 100%;
-		max-height: 300px;
 	  }
 
 	  .button {
@@ -124,89 +118,27 @@
 	<h1>Welcome to Our Responsive Site</h1>
 	<p>This section of the website has a maximum width of 900px and scales down nicely for mobile devices.</p>
 
+	<!-- Loader while fetching -->
+	<div id="loading-indicator">Loading...</div>
+
+	<!-- Swiper Container -->
 	<div class="swiper">
 	  <div class="swiper-wrapper">
-		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/600x400" alt="Slide 1 Image" class="slide-image" />
-		  Slide 1
-		  <div class="button-container">
-			<button class="button" data-slide="0" data-button="left">Left Button</button>
-			<button class="button" data-slide="0" data-button="right">Right Button</button>
-		  </div>
-		</div>
-		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/600x400" alt="Slide 2 Image" class="slide-image" />
-		  Slide 2
-		  <div class="button-container">
-			<button class="button" data-slide="1" data-button="left">Left Button</button>
-			<button class="button" data-slide="1" data-button="right">Right Button</button>
-		  </div>
-		</div>
-		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/600x400" alt="Slide 3 Image" class="slide-image" />
-		  Slide 3
-		  <div class="button-container">
-			<button class="button" data-slide="2" data-button="left">Left Button</button>
-			<button class="button" data-slide="2" data-button="right">Right Button</button>
-		  </div>
-		</div>
-		<div class="swiper-slide" data-selected="">
-		  <img src="https://via.placeholder.com/600x400" alt="Slide 4 Image" class="slide-image" />
-		  Slide 4
-		  <div class="button-container">
-			<button class="button" data-slide="3" data-button="left">Left Button</button>
-			<button class="button" data-slide="3" data-button="right">Right Button</button>
-		  </div>
-		</div>
+		<!-- Slides will be generated dynamically here -->
 	  </div>
 
 	  <div class="swiper-pagination"></div>
 	</div>
 
-	<p>Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
+	<p id="dynamic-content">Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script>
-	// Initialize Swiper
-	const swiper = new Swiper('.swiper', {
-	  slidesPerView: 1,
-	  spaceBetween: 10,
-	  effect: 'cards',
-	  cardsEffect: {
-		slideShadows: true,
-	  },
-	  pagination: {
-		el: '.swiper-pagination',
-		clickable: true, // Enable pagination to be clickable
-	  },
-	  keyboard: {
-		enabled: true,
-		onlyInViewport: true,
-	  },
-	  loop: true,
-	  on: {
-		slideChangeTransitionEnd: function () {
-		  updateButtonStyles();
-		},
-	  },
-	});
+	// Define swiper globally so it can be used in multiple places
+	let swiper;
 
-	// Handle button click
-	document.querySelector('.swiper').addEventListener('click', function(event) {
-	  if (event.target.classList.contains('button')) {
-		const currentSlide = swiper.slides[swiper.activeIndex];  // Use activeIndex to get the current slide
-		const selectedButton = event.target.dataset.button;
-
-		// Store selection in data-selected attribute
-		currentSlide.dataset.selected = selectedButton;
-
-		// Update button styles after selection
-		updateButtonStyles();
-	  }
-	});
-
-	// Function to update button styles
+	// Function to update button styles (same as before)
 	function updateButtonStyles() {
 	  const currentSlide = swiper.slides[swiper.activeIndex];  // Use activeIndex to get the current slide
 	  const buttons = currentSlide.querySelectorAll('.button');
@@ -220,7 +152,107 @@
 		const selected = currentSlide.querySelector(`button[data-button="${selectedButton}"]`);
 		if (selected) selected.classList.add('selected');
 	  }
+
+	  console.log('🔄 Button styles updated on slide change.');
 	}
+
+	// Fetch data from server and dynamically generate slides
+	async function fetchPropositions() {
+	  try {
+		console.log('📡 Fetching propositions from server...');
+
+		// Show the loading indicator
+		document.getElementById('loading-indicator').style.display = 'block';
+
+		const response = await fetch('/api/props');
+		const propositions = await response.json();
+
+		console.log('✅ Propositions fetched successfully:', propositions);
+
+		const swiperWrapper = document.querySelector('.swiper-wrapper');
+		swiperWrapper.innerHTML = '';  // Clear any previous slides
+
+		// Create slides dynamically based on the fetched propositions
+		propositions.forEach((item, index) => {
+		  console.log(`🔨 Creating slide for proposition: ${item.proposition} (Index: ${index})`);
+
+		  const slide = document.createElement('div');
+		  slide.classList.add('swiper-slide');
+		  slide.setAttribute('data-selected', '');
+
+		  // Set the image URL to the one from Airtable, and apply the 'cover' style for object-fit
+		  slide.innerHTML = `
+			<div style="width: 600px; height: 400px; background-image: url('${item.imageUrl}'); background-size: cover; background-position: center;"></div>
+			<div>${item.proposition}</div>
+			<div class="button-container">
+			  <button class="button" data-slide="${index}" data-button="left">Left Button</button>
+			  <button class="button" data-slide="${index}" data-button="right">Right Button</button>
+			</div>
+		  `;
+
+		  swiperWrapper.appendChild(slide);
+		});
+
+		console.log('🧹 All slides generated and added to the Swiper wrapper.');
+
+		// Hide the loading indicator and show the swiper
+		document.getElementById('loading-indicator').style.display = 'none';
+		document.querySelector('.swiper').style.display = 'block';
+
+		// Initialize Swiper after adding slides
+		swiper = new Swiper('.swiper', {
+		  slidesPerView: 1,
+		  spaceBetween: 10,
+		  effect: 'cards',
+		  cardsEffect: {
+			slideShadows: true,
+		  },
+		  pagination: {
+			el: '.swiper-pagination',
+			clickable: true, // Enable pagination to be clickable
+		  },
+		  keyboard: {
+			enabled: true,
+			onlyInViewport: true,
+		  },
+		  loop: true,
+		  on: {
+			slideChangeTransitionEnd: function () {
+			  updateButtonStyles();
+			},
+		  },
+		});
+
+		console.log('🚀 Swiper initialized successfully.');
+
+		// Attach event listener to buttons for selection
+		document.querySelector('.swiper').addEventListener('click', function(event) {
+		  if (event.target.classList.contains('button')) {
+			console.log('🖱️ Button clicked!', event.target);
+
+			const currentSlide = swiper.slides[swiper.activeIndex];
+			const selectedButton = event.target.dataset.button;
+
+			// Store selection in data-selected attribute
+			currentSlide.dataset.selected = selectedButton;
+
+			// Update button styles after selection
+			updateButtonStyles();
+
+			console.log(`👍 Button "${selectedButton}" selected for slide ${swiper.activeIndex}.`);
+		  }
+		});
+	  } catch (error) {
+		console.error('❌ Error fetching propositions:', error);
+		document.getElementById('loading-indicator').textContent = '❌ Failed to load hero cards.';
+	  }
+	}
+
+	// Call fetchPropositions on page load
+	document.addEventListener('DOMContentLoaded', () => {
+	  console.log('🌐 Document loaded. Fetching propositions...');
+	  fetchPropositions();
+	});
   </script>
 </body>
 </html>
