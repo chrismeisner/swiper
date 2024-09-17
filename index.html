@@ -16,8 +16,8 @@
 
 	/* Center the main content */
 	.main-container {
-	  max-width: 900px; /* Limit width to 900px */
-	  margin: 0 auto; /* Center the content */
+	  max-width: 900px;
+	  margin: 0 auto;
 	  padding: 20px;
 	  background-color: #fff;
 	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -25,15 +25,15 @@
 
 	/* Ensure the container is responsive */
 	.main-container img {
-	  max-width: 100%; /* Make images responsive */
+	  max-width: 100%;
 	  height: auto;
 	}
 
 	/* Swiper styling */
 	.swiper {
-	  width: 80%; /* Make the swiper occupy only 80% of the total width */
-	  height: 450px; /* Adjust height to fit the image and buttons */
-	  margin: 0 auto 20px auto; /* Center the swiper with auto margins and space below */
+	  width: 80%;
+	  height: 450px;
+	  margin: 0 auto 20px auto;
 	}
 
 	.swiper-slide {
@@ -48,16 +48,16 @@
 
 	/* Style for the image on each slide */
 	.slide-image {
-	  width: 150px; /* Square size */
-	  height: 150px; /* Square size */
-	  object-fit: cover; /* Ensure the image maintains aspect ratio */
-	  margin-bottom: 20px; /* Space between the image and buttons */
+	  width: 150px;
+	  height: 150px;
+	  object-fit: cover;
+	  margin-bottom: 20px;
 	}
 
 	/* Button container */
 	.button-container {
 	  display: flex;
-	  gap: 10px; /* Space between the buttons */
+	  gap: 10px;
 	  margin-top: 20px;
 	}
 
@@ -72,7 +72,7 @@
 	}
 
 	.button.selected {
-	  background-color: #28a745; /* Change color to indicate selection */
+	  background-color: #28a745;
 	}
 
 	.button:hover {
@@ -82,17 +82,17 @@
 	/* Media queries for better mobile responsiveness */
 	@media (max-width: 900px) {
 	  .main-container {
-		padding: 10px; /* Reduce padding for smaller screens */
+		padding: 10px;
 	  }
 	}
 
 	@media (max-width: 600px) {
 	  .swiper {
-		height: 350px; /* Adjust the height of the Swiper on smaller screens */
+		height: 350px;
 	  }
 
 	  .swiper-slide {
-		font-size: 18px; /* Smaller font size for mobile */
+		font-size: 18px;
 	  }
 
 	  .slide-image {
@@ -101,7 +101,7 @@
 	  }
 
 	  .button {
-		font-size: 14px; /* Smaller button text on mobile */
+		font-size: 14px;
 		padding: 8px 16px;
 	  }
 	}
@@ -109,19 +109,15 @@
 </head>
 <body>
 
-  <!-- Main content container with max-width of 900px -->
   <div class="main-container">
 	<h1>Welcome to Our Responsive Site</h1>
 	<p>This section of the website has a maximum width of 900px and scales down nicely for mobile devices.</p>
-	
-	<!-- Swiper Carousel -->
+
 	<div class="swiper">
 	  <div class="swiper-wrapper">
 		<div class="swiper-slide" data-selected="">
-		  <!-- Image at the top of the card -->
 		  <img src="https://via.placeholder.com/150" alt="Slide 1 Image" class="slide-image" />
 		  Slide 1
-		  <!-- Buttons below the image -->
 		  <div class="button-container">
 			<button class="button" data-slide="0" data-button="left">Left Button</button>
 			<button class="button" data-slide="0" data-button="right">Right Button</button>
@@ -152,16 +148,12 @@
 		  </div>
 		</div>
 	  </div>
-  
-	  <!-- Pagination -->
+
 	  <div class="swiper-pagination"></div>
-  
-	  <!-- Navigation -->
 	  <div class="swiper-button-next"></div>
 	  <div class="swiper-button-prev"></div>
 	</div>
 
-	<!-- Additional content -->
 	<p>Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
 	<img src="https://via.placeholder.com/800x400" alt="Sample Image" />
   </div>
@@ -170,9 +162,9 @@
   <script>
 	// Initialize Swiper
 	const swiper = new Swiper('.swiper', {
-	  slidesPerView: 1, // Show 1 slide at a time (mobile-friendly)
-	  spaceBetween: 10, // Space between slides
-	  effect: 'cards', // Use Cards effect for stacked slides
+	  slidesPerView: 1,
+	  spaceBetween: 10,
+	  effect: 'cards',
 	  cardsEffect: {
 		slideShadows: true,
 	  },
@@ -185,41 +177,40 @@
 		prevEl: '.swiper-button-prev',
 	  },
 	  keyboard: {
-		enabled: true, // Enable keyboard navigation
-		onlyInViewport: true, // Only works when the swiper is visible in the viewport
+		enabled: true,
+		onlyInViewport: true,
 	  },
-	  loop: true, // Infinite loop for the slides
+	  loop: true,
 	  on: {
-		// Trigger when the slide transition ends
 		slideChangeTransitionEnd: function () {
 		  updateButtonStyles();
 		},
 	  },
 	});
 
-	// Function to handle button click using event delegation
+	// Handle button click
 	document.querySelector('.swiper').addEventListener('click', function(event) {
 	  if (event.target.classList.contains('button')) {
-		const currentSlide = swiper.slides[swiper.realIndex];
+		const currentSlide = swiper.slides[swiper.activeIndex];  // Use activeIndex to get the current slide
 		const selectedButton = event.target.dataset.button;
 
-		// Store the selection in the slide's data-selected attribute
+		// Store selection in data-selected attribute
 		currentSlide.dataset.selected = selectedButton;
 
-		// Update button styles for the current slide
+		// Update button styles after selection
 		updateButtonStyles();
 	  }
 	});
 
-	// Function to update button styles based on the selection
+	// Function to update button styles
 	function updateButtonStyles() {
-	  const currentSlide = swiper.slides[swiper.realIndex];
+	  const currentSlide = swiper.slides[swiper.activeIndex];  // Use activeIndex to get the current slide
 	  const buttons = currentSlide.querySelectorAll('.button');
 
-	  // Reset all button styles
+	  // Reset button styles
 	  buttons.forEach(button => button.classList.remove('selected'));
 
-	  // Add 'selected' class to the chosen button
+	  // Highlight the selected button
 	  const selectedButton = currentSlide.dataset.selected;
 	  if (selectedButton) {
 		const selected = currentSlide.querySelector(`button[data-button="${selectedButton}"]`);
