@@ -33,17 +33,47 @@
 	/* Swiper styling */
 	.swiper {
 	  width: 80%; /* Make the swiper occupy only 80% of the total width */
-	  height: 400px; /* Make the swiper cards taller */
+	  height: 450px; /* Adjust height to fit the image and buttons */
 	  margin: 0 auto 20px auto; /* Center the swiper with auto margins and space below */
 	}
 
 	.swiper-slide {
 	  background-color: #ddd;
 	  display: flex;
+	  flex-direction: column;
 	  justify-content: center;
 	  align-items: center;
 	  font-size: 24px;
 	  font-weight: bold;
+	}
+
+	/* Style for the image on each slide */
+	.slide-image {
+	  width: 150px; /* Square size */
+	  height: 150px; /* Square size */
+	  object-fit: cover; /* Ensure the image maintains aspect ratio */
+	  margin-bottom: 20px; /* Space between the image and buttons */
+	}
+
+	/* Button container */
+	.button-container {
+	  display: flex;
+	  gap: 10px; /* Space between the buttons */
+	  margin-top: 20px;
+	}
+
+	/* Style for the buttons */
+	.button {
+	  padding: 10px 20px;
+	  background-color: #007BFF;
+	  color: white;
+	  border: none;
+	  cursor: pointer;
+	  font-size: 16px;
+	}
+
+	.button:hover {
+	  background-color: #0056b3;
 	}
 
 	/* Media queries for better mobile responsiveness */
@@ -55,11 +85,21 @@
 
 	@media (max-width: 600px) {
 	  .swiper {
-		height: 300px; /* Adjust the height of the Swiper on smaller screens */
+		height: 350px; /* Adjust the height of the Swiper on smaller screens */
 	  }
 
 	  .swiper-slide {
 		font-size: 18px; /* Smaller font size for mobile */
+	  }
+
+	  .slide-image {
+		width: 120px;
+		height: 120px;
+	  }
+
+	  .button {
+		font-size: 14px; /* Smaller button text on mobile */
+		padding: 8px 16px;
 	  }
 	}
   </style>
@@ -74,10 +114,40 @@
 	<!-- Swiper Carousel -->
 	<div class="swiper">
 	  <div class="swiper-wrapper">
-		<div class="swiper-slide">Slide 1</div>
-		<div class="swiper-slide">Slide 2</div>
-		<div class="swiper-slide">Slide 3</div>
-		<div class="swiper-slide">Slide 4</div>
+		<div class="swiper-slide">
+		  <!-- Image at the top of the card -->
+		  <img src="https://via.placeholder.com/150" alt="Slide 1 Image" class="slide-image" />
+		  Slide 1
+		  <!-- Buttons below the image -->
+		  <div class="button-container">
+			<button class="button">Left Button</button>
+			<button class="button">Right Button</button>
+		  </div>
+		</div>
+		<div class="swiper-slide">
+		  <img src="https://via.placeholder.com/150" alt="Slide 2 Image" class="slide-image" />
+		  Slide 2
+		  <div class="button-container">
+			<button class="button">Left Button</button>
+			<button class="button">Right Button</button>
+		  </div>
+		</div>
+		<div class="swiper-slide">
+		  <img src="https://via.placeholder.com/150" alt="Slide 3 Image" class="slide-image" />
+		  Slide 3
+		  <div class="button-container">
+			<button class="button">Left Button</button>
+			<button class="button">Right Button</button>
+		  </div>
+		</div>
+		<div class="swiper-slide">
+		  <img src="https://via.placeholder.com/150" alt="Slide 4 Image" class="slide-image" />
+		  Slide 4
+		  <div class="button-container">
+			<button class="button">Left Button</button>
+			<button class="button">Right Button</button>
+		  </div>
+		</div>
 	  </div>
   
 	  <!-- Pagination -->
@@ -114,8 +184,8 @@
 		enabled: true, // Enable keyboard navigation
 		onlyInViewport: true, // Only works when the swiper is visible in the viewport
 	  },
-	  mousewheel: false, // Enable mousewheel control for desktop users
-	  freeMode: false, // Enable free mode for momentum scrolling (works for both touch and trackpad gestures)
+	  mousewheel: false, // Disable mousewheel control for desktop users
+	  freeMode: false, // Disable free mode for momentum scrolling (works for both touch and trackpad gestures)
 	  loop: true, // Infinite loop for the slides
 	});
   </script>
