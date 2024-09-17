@@ -9,9 +9,9 @@
 	/* Global styles */
 	body {
 	  margin: 0;
-	  padding: 0;
+	  padding: 40px 0; /* Added 40px padding at the top */
 	  font-family: Arial, sans-serif;
-	  background-color: #f4f4f4;
+	  background-color: #fff; /* Changed background color to white */
 	}
 
 	/* Center the main content */
@@ -19,8 +19,8 @@
 	  max-width: 900px;
 	  margin: 0 auto;
 	  padding: 20px;
-	  background-color: #fff;
-	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	  background-color: #fff; /* Background color remains white */
+	  /* box-shadow removed */ 
 	}
 
 	/* Ensure the container is responsive */
@@ -88,7 +88,7 @@
 	}
 
 	.button:hover {
-	  background-color: #0056b3;
+	  background-color: #00438d;
 	}
 
 	/* Style for swiper pagination */
@@ -133,8 +133,10 @@
 <body>
 
   <div class="main-container">
+	<!-- 
 	<h1>Welcome to Our Responsive Site</h1>
 	<p>This section of the website has a maximum width of 900px and scales down nicely for mobile devices.</p>
+	-->
 
 	<!-- Loader while fetching -->
 	<div id="loading-indicator">Loading...</div>
@@ -145,32 +147,34 @@
 	  <div class="swiper-pagination"></div>
 	</div>
 
+	<!-- 
 	<p id="dynamic-content">Feel free to explore this demo and resize the window to see how the content adapts to different screen sizes.</p>
+	-->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-  <script>
+<script>
 	// Initialize Swiper globally
 	let swiper;
-
+  
 	// Update button styles based on selected button
 	function updateButtonStyles() {
 	  const currentSlide = swiper.slides[swiper.activeIndex];
 	  const buttons = currentSlide.querySelectorAll('.button');
 	  buttons.forEach(button => button.classList.toggle('selected', button.dataset.button === currentSlide.dataset.selected));
 	}
-
+  
 	// Fetch propositions and generate slides
 	async function fetchPropositions() {
 	  try {
 		const loadingIndicator = document.getElementById('loading-indicator');
 		loadingIndicator.style.display = 'block';
-
+  
 		const response = await fetch('/api/props');
 		const propositions = await response.json();
-
+  
 		if (!propositions.length) throw new Error('No propositions found.');
-
+  
 		const swiperWrapper = document.querySelector('.swiper-wrapper');
 		swiperWrapper.innerHTML = propositions.map((item, index) => `
 		  <div class="swiper-slide" data-selected="">
@@ -184,10 +188,10 @@
 			</div>
 		  </div>
 		`).join('');
-
+  
 		loadingIndicator.style.display = 'none';
 		document.querySelector('.swiper').style.display = 'block';
-
+  
 		// Initialize Swiper if not already initialized
 		if (!swiper) {
 		  swiper = new Swiper('.swiper', {
@@ -200,21 +204,32 @@
 			on: { slideChangeTransitionEnd: updateButtonStyles },
 		  });
 		}
-
+  
 		// Attach button click event handler
 		document.querySelector('.swiper').addEventListener('click', function(event) {
 		  if (event.target.classList.contains('button')) {
 			const currentSlide = swiper.slides[swiper.activeIndex];
-			currentSlide.dataset.selected = event.target.dataset.button;
+			const selectedButton = event.target.dataset.button;
+  
+			// Toggle selection
+			if (currentSlide.dataset.selected === selectedButton) {
+			  // Deselect if it's already selected
+			  currentSlide.dataset.selected = "";
+			} else {
+			  // Select if it's not already selected
+			  currentSlide.dataset.selected = selectedButton;
+			}
+  
+			// Update button styles after selection/deselection
 			updateButtonStyles();
 		  }
 		});
-
+  
 	  } catch (error) {
 		document.getElementById('loading-indicator').textContent = `❌ Failed to load hero cards: ${error.message}`;
 	  }
 	}
-
+  
 	document.addEventListener('DOMContentLoaded', fetchPropositions);
   </script>
 </body>
