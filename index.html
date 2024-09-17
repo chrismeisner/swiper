@@ -12,6 +12,10 @@
 	  padding: 40px 0; /* Added 40px padding at the top */
 	  font-family: Arial, sans-serif;
 	  background-color: #fff; /* Changed background color to white */
+	  height: 100vh;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
 	}
 
 	/* Center the main content */
@@ -29,10 +33,16 @@
 	  height: auto;
 	}
 
+	/* Container for Swiper to apply vertical centering and padding */
+	.swiper-wrapper-container {
+	  width: 100%;
+	  display: flex;
+	  justify-content: center;
+	}
+
 	/* Swiper styling */
 	.swiper {
 	  width: 80%;
-	  margin: 0 auto 20px auto;
 	  display: none;
 	}
 
@@ -111,14 +121,16 @@
 	  margin: 20px;
 	}
 
-	/* Media queries for better mobile responsiveness */
+	/* Center swiper container vertically on mobile screens */
 	@media (max-width: 900px) {
-	  .main-container {
-		padding: 10px;
+	  .swiper-wrapper-container {
+		height: 100vh; /* Full screen height */
+		display: flex;
+		flex-direction: column;
+		justify-content: center; /* Vertically center */
+		align-items: center; /* Horizontally center */
 	  }
-	}
 
-	@media (max-width: 600px) {
 	  .swiper-slide {
 		font-size: 18px;
 	  }
@@ -128,6 +140,7 @@
 		padding: 8px 16px;
 	  }
 	}
+
   </style>
 </head>
 <body>
@@ -141,10 +154,13 @@
 	<!-- Loader while fetching -->
 	<div id="loading-indicator">Loading...</div>
 
-	<!-- Swiper Container -->
-	<div class="swiper">
-	  <div class="swiper-wrapper"></div>
-	  <div class="swiper-pagination"></div>
+	<!-- Wrapper for Swiper to handle centering and padding -->
+	<div class="swiper-wrapper-container">
+	  <!-- Swiper Container -->
+	  <div class="swiper">
+		<div class="swiper-wrapper"></div>
+		<div class="swiper-pagination"></div>
+	  </div>
 	</div>
 
 	<!-- 
