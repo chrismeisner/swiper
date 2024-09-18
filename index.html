@@ -173,90 +173,102 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+
 <script>
-	// Initialize Swiper globally
-	let swiper;
+	  // Initialize Swiper globally
+	  let swiper;
+	
+	  // Update button styles based on selected button
+	  function updateButtonStyles() {
+		const currentSlide = swiper.slides[swiper.activeIndex];
+		const buttons = currentSlide.querySelectorAll('.button');
+		buttons.forEach(button => button.classList.toggle('selected', button.dataset.button === currentSlide.dataset.selected));
+	  }
+	
+	  // Handle button click or touch
+	  function handleButtonClick(event) {
+		const button = event.target.closest('.button');
   
-	// Update button styles based on selected button
-	function updateButtonStyles() {
-	  const currentSlide = swiper.slides[swiper.activeIndex];
-	  const buttons = currentSlide.querySelectorAll('.button');
-	  buttons.forEach(button => button.classList.toggle('selected', button.dataset.button === currentSlide.dataset.selected));
-	}
+		if (!button) return; // Ensure we clicked on a button
   
-	// Fetch propositions and generate slides
-	async function fetchPropositions() {
-	  try {
-		const loadingIndicator = document.getElementById('loading-indicator');
-		loadingIndicator.style.display = 'block';
+		const currentSlide = swiper.slides[swiper.activeIndex];
+		const selectedButton = button.dataset.button;
   
-		const response = await fetch('/api/props');
-		const propositions = await response.json();
-  
-		if (!propositions.length) throw new Error('No propositions found.');
-  
-		const swiperWrapper = document.querySelector('.swiper-wrapper');
-		swiperWrapper.innerHTML = propositions.map((item, index) => `
-		  <div class="swiper-slide" data-selected="">
-			<div class="image-container">
-			  <img src="${item.imageUrl}" alt="Proposition Image">
-			</div>
-			<div class="content-container">
-			  <div>${item.proposition}</div>
-			  <div class="button-container">
-				<button class="button" data-slide="${index}" data-button="left">
-				  Left Button<br><span class="points-text">+50 PTS</span>
-				</button>
-				<button class="button" data-slide="${index}" data-button="right">
-				  Right Button<br><span class="points-text">+50 PTS</span>
-				</button>
-			  </div>
-			</div>
-		  </div>
-		`).join('');
-  
-		loadingIndicator.style.display = 'none';
-		document.querySelector('.swiper').style.display = 'block';
-  
-		// Initialize Swiper if not already initialized
-		if (!swiper) {
-		  swiper = new Swiper('.swiper', {
-			slidesPerView: 1,
-			spaceBetween: 10,
-			effect: 'cards',
-			cardsEffect: { slideShadows: true },
-			pagination: { el: '.swiper-pagination', clickable: true },
-			keyboard: { enabled: true, onlyInViewport: true },
-			on: { slideChangeTransitionEnd: updateButtonStyles },
-		  });
+		// Toggle selection
+		if (currentSlide.dataset.selected === selectedButton) {
+		  // Deselect if it's already selected
+		  currentSlide.dataset.selected = "";
+		} else {
+		  // Select if it's not already selected
+		  currentSlide.dataset.selected = selectedButton;
 		}
   
-		// Attach button click event handler
-		document.querySelector('.swiper').addEventListener('click', function(event) {
-		  if (event.target.classList.contains('button') || event.target.classList.contains('points-text')) {
-			const currentSlide = swiper.slides[swiper.activeIndex];
-			const selectedButton = event.target.closest('.button').dataset.button;
+		// Update button styles after selection/deselection
+		updateButtonStyles();
   
-			// Toggle selection
-			if (currentSlide.dataset.selected === selectedButton) {
-			  // Deselect if it's already selected
-			  currentSlide.dataset.selected = "";
-			} else {
-			  // Select if it's not already selected
-			  currentSlide.dataset.selected = selectedButton;
-			}
-  
-			// Update button styles after selection/deselection
-			updateButtonStyles();
-		  }
-		});
-  
-	  } catch (error) {
-		document.getElementById('loading-indicator').textContent = `❌ Failed to load hero cards: ${error.message}`;
+		// Prevent any default behavior like zooming on double tap
+		event.preventDefault();
 	  }
-	}
-  
-	document.addEventListener('DOMContentLoaded', fetchPropositions);
+	
+	  // Fetch propositions and generate slides
+	  async function fetchPropositions() {
+		try {
+		  const loadingIndicator = document.getElementById('loading-indicator');
+		  loadingIndicator.style.display = 'block';
+	
+		  const response = await fetch('/api/props');
+		  const propositions = await response.json();
+	
+		  if (!propositions.length) throw new Error('No propositions found.');
+	
+		  const swiperWrapper = document.querySelector('.swiper-wrapper');
+		  swiperWrapper.innerHTML = propositions.map((item, index) => `
+			<div class="swiper-slide" data-selected="">
+			  <div class="image-container">
+				<img src="${item.imageUrl}" alt="Proposition Image">
+			  </div>
+			  <div class="content-container">
+				<div>${item.proposition}</div>
+				<div class="button-container">
+				  <button class="button" data-slide="${index}" data-button="left">
+					Left Button<br><span class="points-text">+50 PTS</span>
+				  </button>
+				  <button class="button" data-slide="${index}" data-button="right">
+					Right Button<br><span class="points-text">+50 PTS</span>
+				  </button>
+				</div>
+			  </div>
+			</div>
+		  `).join('');
+	
+		  loadingIndicator.style.display = 'none';
+		  document.querySelector('.swiper').style.display = 'block';
+	
+		  // Initialize Swiper if not already initialized
+		  if (!swiper) {
+			swiper = new Swiper('.swiper', {
+			  slidesPerView: 1,
+			  spaceBetween: 10,
+			  effect: 'cards',
+			  cardsEffect: { slideShadows: true },
+			  pagination: { el: '.swiper-pagination', clickable: true },
+			  keyboard: { enabled: true, onlyInViewport: true },
+			  on: { slideChangeTransitionEnd: updateButtonStyles },
+			});
+		  }
+	
+		  // Attach button click or touch event handler for better mobile support
+		  document.querySelector('.swiper').addEventListener('pointerdown', handleButtonClick);
+	
+		} catch (error) {
+		  document.getElementById('loading-indicator').textContent = `❌ Failed to load hero cards: ${error.message}`;
+		}
+	  }
+	
+	  document.addEventListener('DOMContentLoaded', fetchPropositions);
   </script>
+
+
 </body>
 </html>
