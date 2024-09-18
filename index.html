@@ -185,8 +185,8 @@
 		const buttons = currentSlide.querySelectorAll('.button');
 		buttons.forEach(button => button.classList.toggle('selected', button.dataset.button === currentSlide.dataset.selected));
 	  }
-	
-	  // Handle button click or touch
+  
+	  // Handle button selection and deselection
 	  function handleButtonClick(event) {
 		const button = event.target.closest('.button');
   
@@ -207,7 +207,7 @@
 		// Update button styles after selection/deselection
 		updateButtonStyles();
   
-		// Prevent any default behavior like zooming on double tap
+		// Prevent default behavior like zooming on double tap
 		event.preventDefault();
 	  }
 	
@@ -258,8 +258,9 @@
 			});
 		  }
 	
-		  // Attach button click or touch event handler for better mobile support
-		  document.querySelector('.swiper').addEventListener('pointerdown', handleButtonClick);
+		  // Attach both click and touchend event handlers for better mobile and desktop support
+		  document.querySelector('.swiper').addEventListener('click', handleButtonClick);
+		  document.querySelector('.swiper').addEventListener('touchend', handleButtonClick);
 	
 		} catch (error) {
 		  document.getElementById('loading-indicator').textContent = `❌ Failed to load hero cards: ${error.message}`;
