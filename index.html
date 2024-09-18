@@ -66,21 +66,33 @@
 	  object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
 	}
 
+	/* Content container to match the width of the image */
+	.content-container {
+	  width: 100%;
+	  max-width: 600px;
+	  margin: 0 auto;
+	  text-align: center;
+	}
+
 	/* Button container */
 	.button-container {
 	  display: flex;
 	  gap: 10px;
 	  margin-top: 20px;
+	  justify-content: space-between; /* Ensure buttons are spaced evenly */
 	}
 
 	/* Style for the buttons */
 	.button {
+	  flex: 1; /* Take up equal space (50% each) */
 	  padding: 10px 20px;
 	  background-color: #007BFF;
 	  color: white;
 	  border: none;
 	  cursor: pointer;
 	  font-size: 16px;
+	  text-align: center;
+	  line-height: 1.5;
 	}
 
 	.button.selected {
@@ -89,6 +101,14 @@
 
 	.button:hover {
 	  background-color: #00438d;
+	}
+
+	/* Ensure button text spans two lines */
+	.button span.points-text {
+	  display: block;
+	  font-size: 14px;
+	  margin-top: 4px;
+	  font-weight: normal;
 	}
 
 	/* Style for swiper pagination */
@@ -181,10 +201,16 @@
 			<div class="image-container">
 			  <img src="${item.imageUrl}" alt="Proposition Image">
 			</div>
-			<div>${item.proposition}</div>
-			<div class="button-container">
-			  <button class="button" data-slide="${index}" data-button="left">Left Button</button>
-			  <button class="button" data-slide="${index}" data-button="right">Right Button</button>
+			<div class="content-container">
+			  <div>${item.proposition}</div>
+			  <div class="button-container">
+				<button class="button" data-slide="${index}" data-button="left">
+				  Left Button<br><span class="points-text">+50 PTS</span>
+				</button>
+				<button class="button" data-slide="${index}" data-button="right">
+				  Right Button<br><span class="points-text">+50 PTS</span>
+				</button>
+			  </div>
 			</div>
 		  </div>
 		`).join('');
@@ -207,9 +233,9 @@
   
 		// Attach button click event handler
 		document.querySelector('.swiper').addEventListener('click', function(event) {
-		  if (event.target.classList.contains('button')) {
+		  if (event.target.classList.contains('button') || event.target.classList.contains('points-text')) {
 			const currentSlide = swiper.slides[swiper.activeIndex];
-			const selectedButton = event.target.dataset.button;
+			const selectedButton = event.target.closest('.button').dataset.button;
   
 			// Toggle selection
 			if (currentSlide.dataset.selected === selectedButton) {
